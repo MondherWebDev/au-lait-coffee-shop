@@ -1,25 +1,69 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from 'redis';
 
-// Test function to check Redis Cloud/KV configuration
-async function testVercelKV() {
+// Redis client configuration
+let redisClient: any = null;
+
+async function getRedisClient() {
+  if (!redisClient) {
+    try {
+      const redisUrl = process.env.REDIS_URL || process.env.KV_URL;
+
+      if (!redisUrl) {
+        throw new Error('REDIS_URL or KV_URL not configured');
+      }
+
+      console.log('🔗 Connecting to Redis Cloud...');
+      redisClient = createClient({
+        url: redisUrl,
+        socket: {
+          connectTimeout: 30000,
+          keepAlive: 30000,
+          reconnectStrategy: (retries) => {
+            console.log(`🔄 Redis reconnect attempt ${retries}`);
+            return Math.min(retries * 100, 3000);
+          }
+        }
+      });
+
+      redisClient.on('error', (err: Error) => {
+        console.error('❌ Redis Client Error:', err.message);
+      });
+
+      redisClient.on('connect', () => {
+        console.log('✅ Redis Cloud connected successfully');
+      });
+
+      await redisClient.connect();
+    } catch (error) {
+      console.error('❌ Failed to connect to Redis Cloud:', error);
+      throw error;
+    }
+  }
+
+  return redisClient;
+}
+
+// Test function to check Redis Cloud connection
+async function testRedisConnection() {
   try {
-    const { kv } = await import('@vercel/kv');
+    const client = await getRedisClient();
 
     // Try to set a test value
-    await kv.set('test_key', 'test_value');
+    await client.set('test_key', 'test_value');
 
     // Try to get it back
-    const testValue = await kv.get('test_key');
+    const testValue = await client.get('test_key');
 
     if (testValue === 'test_value') {
-      console.log('✅ Redis Cloud (KV) is working correctly');
+      console.log('✅ Redis Cloud is working correctly');
       return true;
     } else {
-      console.log('❌ Redis Cloud (KV) test failed - value mismatch');
+      console.log('❌ Redis Cloud test failed - value mismatch');
       return false;
     }
   } catch (error) {
-    console.log('❌ Redis Cloud (KV) not configured or not available:', error instanceof Error ? error.message : String(error));
+    console.log('❌ Redis Cloud not available:', error instanceof Error ? error.message : String(error));
     return false;
   }
 }
@@ -42,8 +86,8 @@ export async function POST(request: NextRequest) {
     console.log('📝 Content update received:', Object.keys(body));
     console.log('📝 Content size:', JSON.stringify(body).length, 'characters');
 
-    // Test Vercel KV configuration
-    const kvWorking = await testVercelKV();
+    // Test Redis Cloud configuration
+    const redisWorking = await testRedisConnection();
 
     // For now, save to localStorage as fallback since Vercel KV might not be configured
     if (typeof window !== 'undefined') {
@@ -107,12 +151,12 @@ export async function POST(request: NextRequest) {
 
 // Separate test endpoint for KV configuration
 export async function PATCH() {
-  const kvWorking = await testVercelKV();
+  const redisWorking = await testRedisConnection();
 
   return NextResponse.json({
-    kvConfigured: kvWorking,
+    redisConfigured: redisWorking,
     timestamp: new Date().toISOString(),
-    message: kvWorking ? 'Vercel KV is working correctly' : 'Vercel KV is not configured or not available'
+    message: redisWorking ? 'Redis Cloud is working correctly' : 'Redis Cloud is not configured or not available'
   });
 }
 
