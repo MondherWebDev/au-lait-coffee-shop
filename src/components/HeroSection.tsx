@@ -21,30 +21,49 @@ export default function HeroSection({ hero }: HeroSectionProps) {
 
       const attemptPlay = async () => {
         try {
+          console.log('Attempting to play video...');
           video.muted = true;
           video.playsInline = true;
+
+          // Try to play immediately
           await video.play();
+          console.log('Video started successfully');
         } catch (error) {
-          console.log('Autoplay failed:', error);
+          console.log('Initial autoplay failed:', error);
+          // Video autoplay failed, but that's okay - it will display as a static image
         }
       };
 
-      const handleUserInteraction = async () => {
-        await attemptPlay();
-        // Remove listeners after first interaction
+      const handleUserInteraction = async (event: Event) => {
+        console.log('User interaction detected:', event.type);
+        try {
+          video.muted = true;
+          video.playsInline = true;
+          await video.play();
+          console.log('Video started after user interaction');
+        } catch (error) {
+          console.log('User interaction autoplay failed:', error);
+        }
+
+        // Remove all listeners after successful play
         document.removeEventListener('touchstart', handleUserInteraction);
         document.removeEventListener('click', handleUserInteraction);
         document.removeEventListener('scroll', handleUserInteraction);
+        document.removeEventListener('touchend', handleUserInteraction);
+        document.removeEventListener('touchmove', handleUserInteraction);
       };
 
-      // Try immediate autoplay for desktop
-      if (!isMobile) {
-        video.addEventListener('loadedmetadata', attemptPlay);
-      } else {
-        // For mobile, wait for user interaction
-        document.addEventListener('touchstart', handleUserInteraction, { once: true });
-        document.addEventListener('click', handleUserInteraction, { once: true });
-        document.addEventListener('scroll', handleUserInteraction, { once: true });
+      // Try immediate autoplay first (works on some mobile browsers now)
+      video.addEventListener('loadedmetadata', attemptPlay);
+
+      // Also set up user interaction listeners as backup
+      if (isMobile) {
+        console.log('Setting up mobile interaction listeners');
+        document.addEventListener('touchstart', handleUserInteraction, { passive: true });
+        document.addEventListener('click', handleUserInteraction, { passive: true });
+        document.addEventListener('scroll', handleUserInteraction, { passive: true });
+        document.addEventListener('touchend', handleUserInteraction, { passive: true });
+        document.addEventListener('touchmove', handleUserInteraction, { passive: true });
       }
 
       return () => {
@@ -52,6 +71,8 @@ export default function HeroSection({ hero }: HeroSectionProps) {
         document.removeEventListener('touchstart', handleUserInteraction);
         document.removeEventListener('click', handleUserInteraction);
         document.removeEventListener('scroll', handleUserInteraction);
+        document.removeEventListener('touchend', handleUserInteraction);
+        document.removeEventListener('touchmove', handleUserInteraction);
       };
     }
   }, [hero.video]);
