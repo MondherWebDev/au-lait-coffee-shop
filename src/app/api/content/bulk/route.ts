@@ -1,5 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Test function to check Vercel KV configuration
+async function testVercelKV() {
+  try {
+    const { kv } = await import('@vercel/kv');
+
+    // Try to set a test value
+    await kv.set('test_key', 'test_value');
+
+    // Try to get it back
+    const testValue = await kv.get('test_key');
+
+    if (testValue === 'test_value') {
+      console.log('✅ Vercel KV is working correctly');
+      return true;
+    } else {
+      console.log('❌ Vercel KV test failed - value mismatch');
+      return false;
+    }
+  } catch (error) {
+    console.log('❌ Vercel KV not configured or not available:', error instanceof Error ? error.message : String(error));
+    return false;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -17,6 +41,9 @@ export async function POST(request: NextRequest) {
 
     console.log('📝 Content update received:', Object.keys(body));
     console.log('📝 Content size:', JSON.stringify(body).length, 'characters');
+
+    // Test Vercel KV configuration
+    const kvWorking = await testVercelKV();
 
     // For now, save to localStorage as fallback since Vercel KV might not be configured
     if (typeof window !== 'undefined') {
@@ -49,7 +76,8 @@ export async function POST(request: NextRequest) {
         success: true,
         message: 'Content saved successfully to database',
         data: body,
-        storage: 'vercel-kv'
+        storage: 'vercel-kv',
+        kvStatus: 'working'
       });
 
     } catch (kvError) {
@@ -75,6 +103,17 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// Separate test endpoint for KV configuration
+export async function PATCH() {
+  const kvWorking = await testVercelKV();
+
+  return NextResponse.json({
+    kvConfigured: kvWorking,
+    timestamp: new Date().toISOString(),
+    message: kvWorking ? 'Vercel KV is working correctly' : 'Vercel KV is not configured or not available'
+  });
 }
 
 // GET endpoint to retrieve content
