@@ -99,6 +99,7 @@ export default function ProductManager({ products, categories, onUpdateProducts 
   };
 
   const handleEdit = (product: Product) => {
+    console.log('Editing product:', product);
     setEditingProduct(product);
     setFormData({
       name: product.name,
