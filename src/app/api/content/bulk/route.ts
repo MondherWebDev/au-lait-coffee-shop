@@ -7,26 +7,43 @@ let redisClient: any = null;
 async function getRedisClient() {
   if (!redisClient) {
     try {
+      // Use individual connection parameters for Redis Cloud
       const redisUrl = process.env.REDIS_URL || process.env.KV_URL;
 
-      if (!redisUrl) {
-        throw new Error('REDIS_URL or KV_URL not configured');
-      }
-
       console.log('🔗 Initializing Redis Cloud connection...');
-      console.log('🔗 Redis URL:', redisUrl.replace(/:[^:]+@/, ':****@')); // Hide password in logs
 
-      redisClient = createClient({
-        url: redisUrl,
-        socket: {
-          connectTimeout: 30000,
-          keepAlive: 30000,
-          reconnectStrategy: (retries) => {
-            console.log(`🔄 Redis reconnect attempt ${retries}`);
-            return Math.min(retries * 100, 3000);
+      if (redisUrl) {
+        // If URL is provided, use it
+        console.log('🔗 Using Redis URL connection...');
+        redisClient = createClient({
+          url: redisUrl,
+          socket: {
+            connectTimeout: 30000,
+            keepAlive: 30000,
+            reconnectStrategy: (retries) => {
+              console.log(`🔄 Redis reconnect attempt ${retries}`);
+              return Math.min(retries * 100, 3000);
+            }
           }
-        }
-      });
+        });
+      } else {
+        // Use individual parameters (Redis Cloud format)
+        console.log('🔗 Using individual parameter connection...');
+        redisClient = createClient({
+          username: 'default',
+          password: 'gbiromEfdQ7mwGZuKaqWXSXvIzuOgA4n',
+          socket: {
+            host: 'redis-18281.c263.us-east-1-2.ec2.redns.redis-cloud.com',
+            port: 18281,
+            connectTimeout: 30000,
+            keepAlive: 30000,
+            reconnectStrategy: (retries) => {
+              console.log(`🔄 Redis reconnect attempt ${retries}`);
+              return Math.min(retries * 100, 3000);
+            }
+          }
+        });
+      }
 
       redisClient.on('error', (err: Error) => {
         console.error('❌ Redis Client Error:', err.message);
