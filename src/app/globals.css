@@ -562,6 +562,33 @@ footer {
 
 /* Small Mobile Devices */
 @media (max-width: 480px) {
+  .hero {
+    height: calc(100vh - 80px) !important;
+    min-height: 350px !important;
+    max-height: 500px !important;
+    width: calc(100vw - 10px) !important;
+    margin: 5px !important;
+    margin-top: 90px !important;
+  }
+
+  .hero .hero-title {
+    font-size: 2rem !important;
+    margin-bottom: 16px !important;
+    line-height: 1.2 !important;
+  }
+
+  .hero .hero-subtitle {
+    font-size: 1rem !important;
+    margin-bottom: 24px !important;
+    line-height: 1.4 !important;
+  }
+
+  .hero .hero-cta {
+    font-size: 16px !important;
+    padding: 14px 28px !important;
+    border-radius: 8px !important;
+  }
+
   .hero-content h1 {
     font-size: 1.8rem !important;
   }
@@ -614,9 +641,9 @@ footer {
     margin: 0 !important;
   }
 
-  /* Hide desktop CTA button on mobile */
+  /* Show CTA button on mobile with responsive styling */
   .btn-primary {
-    display: none !important;
+    display: inline-block !important;
   }
 
   /* Hide Quick Links section on mobile */
@@ -624,9 +651,15 @@ footer {
     display: none !important;
   }
 
-  /* Hide hero section on mobile */
+  /* Show hero section on mobile with responsive design */
   .hero {
-    display: none !important;
+    display: flex !important;
+    height: calc(100vh - 80px) !important;
+    min-height: 400px !important;
+    max-height: 600px !important;
+    width: calc(100vw - 20px) !important;
+    margin: 10px !important;
+    margin-top: 100px !important;
   }
 
   .hero-content {
@@ -658,6 +691,11 @@ footer {
   .hero .hero-cta:hover {
     transform: translateY(-3px) !important;
     box-shadow: 0 8px 16px rgba(250, 212, 91, 0.5) !important;
+  }
+
+  /* Mobile-specific hero content padding */
+  .hero-content-entrance {
+    padding: 15px !important;
   }
 
   /* Sections Mobile */
