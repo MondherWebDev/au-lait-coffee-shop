@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+
 interface HeroSectionProps {
   hero: {
     title: string;
@@ -10,6 +12,41 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ hero }: HeroSectionProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video && hero.video) {
+      const playVideo = async () => {
+        try {
+          // Check if it's a mobile device
+          const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+          if (isMobile) {
+            // For mobile, we need to ensure playsInline and handle autoplay restrictions
+            video.playsInline = true;
+            video.muted = true; // Must be muted for autoplay on mobile
+
+            // Try to play the video
+            await video.play();
+          } else {
+            // For desktop, standard autoplay should work
+            await video.play();
+          }
+        } catch (error) {
+          console.log('Video autoplay failed:', error);
+          // Video autoplay failed, but that's okay - it will display as a static image
+        }
+      };
+
+      // Load video metadata first
+      video.addEventListener('loadedmetadata', playVideo);
+
+      return () => {
+        video.removeEventListener('loadedmetadata', playVideo);
+      };
+    }
+  }, [hero.video]);
   return (
     <section className="hero" style={{
       position: 'relative',
@@ -42,6 +79,7 @@ export default function HeroSection({ hero }: HeroSectionProps) {
         {/* Video Background inside Card */}
         {hero.video && (
           <video
+            ref={videoRef}
             className="hero-video"
             style={{
               position: 'absolute',
@@ -58,6 +96,10 @@ export default function HeroSection({ hero }: HeroSectionProps) {
             loop
             muted
             playsInline
+            preload="metadata"
+            controls={false}
+            disablePictureInPicture
+            webkit-playsinline="true"
           >
             <source src={hero.video} type="video/mp4" />
             Your browser does not support the video tag.
