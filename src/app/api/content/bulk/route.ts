@@ -91,10 +91,14 @@ async function testRedisConnection() {
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('🔗 API route called - starting content save process');
+
     const body = await request.json();
+    console.log('🔗 Request body received, parsing JSON...');
 
     // Validate the data
     if (!body || typeof body !== 'object') {
+      console.error('❌ Invalid request body:', body);
       return NextResponse.json(
         {
           success: false,
@@ -108,9 +112,11 @@ export async function POST(request: NextRequest) {
     console.log('📝 Content size:', JSON.stringify(body).length, 'characters');
 
     // Test Redis Cloud configuration
+    console.log('🔗 Testing Redis Cloud connection...');
     const redisWorking = await testRedisConnection();
+    console.log('🔗 Redis test result:', redisWorking);
 
-    // For now, save to localStorage as fallback since Vercel KV might not be configured
+    // Always save to localStorage as backup
     if (typeof window !== 'undefined') {
       try {
         localStorage.setItem('aulait_content_backup', JSON.stringify(body));
@@ -122,20 +128,30 @@ export async function POST(request: NextRequest) {
 
     // Try Redis Cloud directly first
     try {
+      console.log('🔗 Attempting to connect to Redis Cloud...');
       const client = await getRedisClient();
+      console.log('🔗 Redis client obtained, testing connection...');
+
+      // Test basic Redis operations
+      await client.set('test_connection', 'working');
+      const testResult = await client.get('test_connection');
+      console.log('🔗 Redis test result:', testResult);
 
       // Save to Redis Cloud for persistence
       const contentKey = 'aulait_content_data';
+      console.log('🔗 Saving content to Redis Cloud...');
 
       // Store the entire content object in Redis
       await client.set(contentKey, JSON.stringify(body));
+      console.log('🔗 Main content saved to Redis');
 
       // Also store individual sections for easier retrieval
       for (const [section, data] of Object.entries(body)) {
         await client.set(`aulait_section_${section}`, JSON.stringify(data));
+        console.log(`🔗 Section ${section} saved to Redis`);
       }
 
-      console.log('✅ Content saved to Redis Cloud');
+      console.log('✅ Content saved to Redis Cloud successfully');
 
       return NextResponse.json({
         success: true,
@@ -147,17 +163,28 @@ export async function POST(request: NextRequest) {
 
     } catch (redisError) {
       console.warn('⚠️ Redis Cloud not available, using localStorage only:', redisError);
+      console.warn('⚠️ Error details:', {
+        message: redisError instanceof Error ? redisError.message : String(redisError),
+        stack: redisError instanceof Error ? redisError.stack : undefined
+      });
 
       return NextResponse.json({
         success: true,
         message: 'Content saved to localStorage (Redis unavailable)',
         data: body,
-        storage: 'localStorage'
+        storage: 'localStorage',
+        error: redisError instanceof Error ? redisError.message : String(redisError)
       });
     }
 
   } catch (error) {
     console.error('❌ Content save error:', error);
+    console.error('❌ Error details:', {
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined
+    });
+
     return NextResponse.json(
       {
         success: false,
