@@ -372,12 +372,20 @@ export default function AdminDashboard({ isOpen, onClose, currentContent, onCont
           return 'http://192.168.106.129:3001';
         }
 
-        // For localhost access
+        // For localhost access, use the Express server
+        if (currentUrl.includes('localhost') || currentUrl.includes('127.0.0.1')) {
+          return 'http://localhost:3001';
+        }
+
+        // For production (Vercel), we'll need to use a different approach
+        // For now, fallback to relative path for production
         return '';
       };
 
       const apiBaseUrl = getApiBaseUrl();
       apiUrl = apiBaseUrl ? `${apiBaseUrl}/api/content/bulk` : '/api/content/bulk';
+
+      console.log('🎯 Using API URL:', apiUrl);
 
       console.log('💾 Saving to API URL:', apiUrl);
       console.log('💾 Content being saved:', JSON.stringify(content, null, 2));
