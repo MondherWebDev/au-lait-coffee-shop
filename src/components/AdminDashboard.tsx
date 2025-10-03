@@ -377,12 +377,39 @@ export default function AdminDashboard({ isOpen, onClose, currentContent, onCont
           return 'http://localhost:3001';
         }
 
-        // For production (Vercel), we'll need to use a different approach
-        // For now, fallback to relative path for production
+        // For production (Vercel), disable server-side saving
+        // Vercel serverless functions can't write to file system
+        if (currentUrl.includes('vercel.app') || currentUrl.includes('au-lait-coffee-shop')) {
+          console.log('🔒 Vercel production detected - using localStorage only');
+          return null; // Signal to use localStorage only
+        }
+
+        // Fallback
         return '';
       };
 
       const apiBaseUrl = getApiBaseUrl();
+
+      // For Vercel production, skip server saving entirely
+      if (apiBaseUrl === null) {
+        console.log('💾 Production mode: Saving to localStorage only');
+        setSaveStatus('💾 Saving to localStorage (Production Mode)');
+        try {
+          localStorage.setItem('auLaitContent', JSON.stringify(content));
+          onContentUpdate(content);
+          setLastSaved(new Date());
+          setContentVersion(prev => prev + 1);
+          setSaveStatus('✅ Content saved to localStorage successfully!');
+          setTimeout(() => setSaveStatus(''), 3000);
+        } catch (localError) {
+          console.error('❌ localStorage error:', localError);
+          setSaveStatus('❌ Error saving to localStorage');
+          setTimeout(() => setSaveStatus(''), 3000);
+        }
+        setIsUploading(false);
+        return; // Exit early for production
+      }
+
       apiUrl = apiBaseUrl ? `${apiBaseUrl}/api/content/bulk` : '/api/content/bulk';
 
       console.log('🎯 Using API URL:', apiUrl);
