@@ -7,57 +7,57 @@ let redisClient: any = null;
 async function getRedisClient() {
   if (!redisClient) {
     try {
-      // Use individual connection parameters for Redis Cloud
-      const redisUrl = process.env.REDIS_URL || process.env.KV_URL;
-
       console.log('🔗 Initializing Redis Cloud connection...');
+      console.log('🔗 Creating Redis client with individual parameters...');
 
-      if (redisUrl) {
-        // If URL is provided, use it
-        console.log('🔗 Using Redis URL connection...');
-        redisClient = createClient({
-          url: redisUrl,
-          socket: {
-            connectTimeout: 30000,
-            keepAlive: 30000,
-            reconnectStrategy: (retries) => {
-              console.log(`🔄 Redis reconnect attempt ${retries}`);
-              return Math.min(retries * 100, 3000);
-            }
+      // Use individual parameters (Redis Cloud format)
+      redisClient = createClient({
+        username: 'default',
+        password: 'gbiromEfdQ7mwGZuKaqWXSXvIzuOgA4n',
+        socket: {
+          host: 'redis-18281.c263.us-east-1-2.ec2.redns.redis-cloud.com',
+          port: 18281,
+          connectTimeout: 30000,
+          keepAlive: 30000,
+          reconnectStrategy: (retries) => {
+            console.log(`🔄 Redis reconnect attempt ${retries}`);
+            return Math.min(retries * 100, 3000);
           }
-        });
-      } else {
-        // Use individual parameters (Redis Cloud format)
-        console.log('🔗 Using individual parameter connection...');
-        redisClient = createClient({
-          username: 'default',
-          password: 'gbiromEfdQ7mwGZuKaqWXSXvIzuOgA4n',
-          socket: {
-            host: 'redis-18281.c263.us-east-1-2.ec2.redns.redis-cloud.com',
-            port: 18281,
-            connectTimeout: 30000,
-            keepAlive: 30000,
-            reconnectStrategy: (retries) => {
-              console.log(`🔄 Redis reconnect attempt ${retries}`);
-              return Math.min(retries * 100, 3000);
-            }
-          }
-        });
-      }
+        }
+      });
 
       redisClient.on('error', (err: Error) => {
         console.error('❌ Redis Client Error:', err.message);
+        console.error('❌ Redis Error Stack:', err.stack);
       });
 
       redisClient.on('connect', () => {
         console.log('✅ Redis Cloud connected successfully');
       });
 
+      redisClient.on('ready', () => {
+        console.log('✅ Redis Cloud ready for operations');
+      });
+
       console.log('🔗 Attempting to connect to Redis Cloud...');
       await redisClient.connect();
       console.log('✅ Redis Cloud connection established');
+
+      // Test the connection immediately
+      try {
+        await redisClient.ping();
+        console.log('✅ Redis Cloud ping successful');
+      } catch (pingError) {
+        console.error('❌ Redis Cloud ping failed:', pingError);
+      }
+
     } catch (error) {
       console.error('❌ Failed to connect to Redis Cloud:', error);
+      console.error('❌ Error details:', {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        name: error instanceof Error ? error.name : undefined
+      });
       throw error;
     }
   }
