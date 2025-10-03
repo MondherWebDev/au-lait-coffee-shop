@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Test function to check Vercel KV configuration
+// Test function to check Upstash Redis/KV configuration
 async function testVercelKV() {
   try {
     const { kv } = await import('@vercel/kv');
@@ -12,14 +12,14 @@ async function testVercelKV() {
     const testValue = await kv.get('test_key');
 
     if (testValue === 'test_value') {
-      console.log('✅ Vercel KV is working correctly');
+      console.log('✅ Upstash Redis (KV) is working correctly');
       return true;
     } else {
-      console.log('❌ Vercel KV test failed - value mismatch');
+      console.log('❌ Upstash Redis (KV) test failed - value mismatch');
       return false;
     }
   } catch (error) {
-    console.log('❌ Vercel KV not configured or not available:', error instanceof Error ? error.message : String(error));
+    console.log('❌ Upstash Redis (KV) not configured or not available:', error instanceof Error ? error.message : String(error));
     return false;
   }
 }
