@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Au Lait Mobile Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #1a1412;
+            color: #f0e9e1;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(45, 45, 45, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #FAD45B;
+        }
+        .test-button {
+            background: #FAD45B;
+            color: #1a1412;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 0;
+            font-weight: 600;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 6px;
+            background: rgba(250, 212, 91, 0.1);
+            border-left: 4px solid #FAD45B;
+        }
+        .error {
+            background: rgba(220, 38, 38, 0.1);
+            border-left-color: #dc2626;
+        }
+        .success {
+            background: rgba(34, 197, 94, 0.1);
+            border-left-color: #22c55e;
+        }
+        pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔧 Au Lait Mobile Connection Test</h1>
+        <p>Test if your mobile device can connect to the backend server.</p>
+
+        <button class="test-button" onclick="testLocalhost()">Test Localhost Connection</button>
+        <button class="test-button" onclick="testMobileIP()">Test Mobile IP Connection</button>
+        <button class="test-button" onclick="testCurrentURL()">Test Current URL API</button>
+
+        <div id="results"></div>
+
+        <h3>📋 Manual Testing Steps:</h3>
+        <ol>
+            <li>Start your backend server: <code>npm run server</code></li>
+            <li>Open this page in your mobile browser</li>
+            <li>Click the test buttons above</li>
+            <li>If tests pass, try your main website</li>
+        </ol>
+
+        <h3>🚨 Common Issues & Solutions:</h3>
+
+        <h4>Issue: "Connection refused"</h4>
+        <p><strong>Solution:</strong> Make sure the backend server is running</p>
+        <pre># Terminal 1 - Start backend
+npm run server
+
+# Terminal 2 - Check if running
+curl http://localhost:3001/api/health</pre>
+
+        <h4>Issue: "CORS error"</h4>
+        <p><strong>Solution:</strong> Server is configured for mobile access, but check your IP</p>
+        <pre># Find your mobile IP
+# iOS: Settings > WiFi > Your Network > IP Address
+# Android: Settings > Network > WiFi > Your Network > IP Address</pre>
+
+        <h4>Issue: "No data" on main website</h4>
+        <p><strong>Solution:</strong> Check browser console for errors</p>
+        <pre># In mobile browser:
+# 1. Open Dev Tools (F12)
+# 2. Check Console tab for errors
+# 3. Look for API or network errors</pre>
+
+        <h3>📞 Need Help?</h3>
+        <p>Check the server console/terminal for error messages and share them.</p>
+    </div>
+
+    <script>
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            results.appendChild(div);
+        }
+
+        async function testConnection(url, description) {
+            try {
+                addResult(`Testing ${description}: ${url}`);
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult(`✅ SUCCESS: ${description} is accessible`, 'success');
+                    addResult(`Response: ${JSON.stringify(data)}`, 'success');
+                } else {
+                    addResult(`❌ FAILED: ${description} returned ${response.status}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ ERROR: ${description} - ${error.message}`, 'error');
+            }
+        }
+
+        async function testLocalhost() {
+            await testConnection('http://localhost:3001/api/health', 'Localhost API');
+        }
+
+        async function testMobileIP() {
+            await testConnection('http://192.168.106.129:3001/api/health', 'Mobile IP API');
+        }
+
+        async function testCurrentURL() {
+            const currentUrl = window.location.href;
+            const isMobileIP = currentUrl.includes('192.168.106.129');
+
+            if (isMobileIP) {
+                await testConnection('/api/content', 'Current URL API (Mobile)');
+            } else {
+                await testConnection('http://192.168.106.129:3001/api/content', 'Mobile API from Desktop');
+            }
+        }
+
+        // Auto-test on page load
+        window.onload = function() {
+            addResult('🔧 Mobile Connection Test Loaded');
+            addResult('Make sure your backend server is running on port 3001');
+        };
+    </script>
+</body>
+</html>

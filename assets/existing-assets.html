@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Use Existing Assets - Golden Bean Brews</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #fff;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #FAD45B;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .asset-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .asset-section h2 {
+            color: #FAD45B;
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+        .url-input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-family: monospace;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        .url-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .apply-btn {
+            background: #FAD45B;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            color: #000;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        .apply-btn:hover {
+            background: #e6c04a;
+            transform: translateY(-2px);
+        }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        .status.success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #4CAF50;
+        }
+        .status.error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #f44336;
+        }
+        .instructions {
+            background: rgba(250, 212, 91, 0.1);
+            border: 1px solid rgba(250, 212, 91, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .instructions h3 {
+            color: #FAD45B;
+            margin-top: 0;
+        }
+        .instructions ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        .preview {
+            margin-top: 15px;
+        }
+        .preview img {
+            max-width: 200px;
+            border-radius: 8px;
+            border: 2px solid #FAD45B;
+        }
+        .preview video {
+            max-width: 300px;
+            border-radius: 8px;
+            border: 2px solid #FAD45B;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🫘 Use Your Existing Cloudinary Assets</h1>
+
+        <div class="instructions">
+            <h3>📋 How to Get Your Image URLs:</h3>
+            <ol>
+                <li>Go to your <a href="https://cloudinary.com/console" target="_blank" style="color: #FAD45B;">Cloudinary Dashboard</a></li>
+                <li>Click on "Media Library" in the left sidebar</li>
+                <li>Click on any image you want to use</li>
+                <li>Copy the "Secure URL" from the right panel</li>
+                <li>Paste it below in the corresponding field</li>
+            </ol>
+            <div style="background: rgba(250, 212, 91, 0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                <strong>✅ Your Cloudinary:</strong> dci2zslwa (already configured!)
+            </div>
+        </div>
+
+        <div class="asset-section">
+            <h2>🎥 Hero Video</h2>
+            <p>Paste the URL of your hero section video</p>
+
+            <!-- Test Section -->
+            <div style="background: rgba(250, 212, 91, 0.1); border: 1px solid rgba(250, 212, 91, 0.3); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                <strong>🧪 Quick Test:</strong><br>
+                <button class="apply-btn" onclick="loadTestVideo()" style="background: #ff9800; font-size: 0.9em; margin-top: 8px;">Load Test Video</button>
+                <p style="font-size: 0.9em; margin: 8px 0 0 0; opacity: 0.8;">This will load a working test video to verify the system works</p>
+            </div>
+
+            <input type="url" id="hero-video-url" class="url-input" placeholder="https://res.cloudinary.com/dci2zslwa/video/upload/v1234567890/your-video.mp4">
+            <div class="preview" id="hero-preview" style="display: none;">
+                <video controls id="hero-video-preview"></video>
+            </div>
+            <button class="apply-btn" onclick="applyHeroVideo()">Apply Hero Video</button>
+            <div id="hero-status"></div>
+        </div>
+
+        <div class="asset-section">
+            <h2>☕ Product Images</h2>
+            <p>Paste URLs for your coffee product images (one per line)</p>
+            <textarea id="product-images-url" class="url-input" rows="6" placeholder="https://res.cloudinary.com/dci2zslwa/image/upload/v1234567890/espresso.jpg
+https://res.cloudinary.com/dci2zslwa/image/upload/v1234567890/latte.jpg
+https://res.cloudinary.com/dci2zslwa/image/upload/v1234567890/cappuccino.jpg"></textarea>
+            <div class="preview" id="product-preview" style="display: none;">
+                <div id="product-images-preview"></div>
+            </div>
+            <button class="apply-btn" onclick="applyProductImages()">Apply Product Images</button>
+            <div id="product-status"></div>
+        </div>
+
+        <div class="asset-section">
+            <h2>🖼️ Gallery Images</h2>
+            <p>Paste URLs for your gallery images (one per line)</p>
+            <textarea id="gallery-images-url" class="url-input" rows="6" placeholder="https://res.cloudinary.com/dci2zslwa/image/upload/v1234567890/gallery-1.jpg
+https://res.cloudinary.com/dci2zslwa/image/upload/v1234567890/gallery-2.jpg
+https://res.cloudinary.com/dci2zslwa/image/upload/v1234567890/gallery-3.jpg
+https://res.cloudinary.com/dci2zslwa/image/upload/v1234567890/gallery-4.jpg"></textarea>
+            <div class="preview" id="gallery-preview" style="display: none;">
+                <div id="gallery-images-preview"></div>
+            </div>
+            <button class="apply-btn" onclick="applyGalleryImages()">Apply Gallery Images</button>
+            <div id="gallery-status"></div>
+        </div>
+
+        <div class="asset-section">
+            <h2>🎯 Apply All Assets</h2>
+            <p>Apply all your entered URLs to the website at once</p>
+            <button class="apply-btn" onclick="applyAllAssets()" style="background: linear-gradient(45deg, #FAD45B, #e6c04a); font-size: 1.1em; padding: 15px 30px;">🚀 Apply All to Website</button>
+            <div id="apply-all-status"></div>
+        </div>
+
+        <!-- Quick Test Section -->
+        <div class="asset-section" style="background: rgba(33, 150, 243, 0.1); border: 1px solid rgba(33, 150, 243, 0.3);">
+            <h2>🧪 Quick Video Test</h2>
+            <p>Test if your video is working on the main website</p>
+            <button class="apply-btn" onclick="testMainWebsite()" style="background: #2196F3; margin-bottom: 10px;">Check Main Website Video</button>
+            <div id="video-test-status"></div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <p><a href="index.html" style="color: #FAD45B; text-decoration: none; font-weight: 600;">← Back to Website</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Simple status display function
+        function showStatus(divId, message, type) {
+            const div = document.getElementById(divId);
+            if (div) {
+                div.textContent = message;
+                div.className = `status ${type}`;
+            }
+        }
+
+        // Load test video
+        function loadTestVideo() {
+            const testVideoUrl = 'https://videos.pexels.com/video-files/7487671/7487671-hd_1920_1080_24fps.mp4';
+            document.getElementById('hero-video-url').value = testVideoUrl;
+            showStatus('hero-status', '🧪 Test video loaded! Click "Apply Hero Video" to see it on your website.', 'success');
+        }
+
+        // Apply hero video
+        function applyHeroVideo() {
+            const url = document.getElementById('hero-video-url').value.trim();
+            if (!url) {
+                showStatus('hero-status', 'Please enter a video URL', 'error');
+                return;
+            }
+
+            // Store in localStorage
+            const assets = JSON.parse(localStorage.getItem('goldenBeanAssets') || '{}');
+            assets.heroVideo = {
+                optimizedUrl: url,
+                originalUrl: url,
+                publicId: url.split('/').pop().split('.')[0]
+            };
+            localStorage.setItem('goldenBeanAssets', JSON.stringify(assets));
+
+            // Update the actual video element
+            const heroVideo = document.querySelector('.hero-video source');
+            if (heroVideo) {
+                heroVideo.src = url;
+                heroVideo.type = 'video/mp4';
+                document.querySelector('.hero-video').load();
+                console.log('Video updated to:', url);
+            }
+
+            showStatus('hero-status', '✅ Hero video updated! Refresh the page to see changes.', 'success');
+        }
+
+        // Apply product images
+        function applyProductImages() {
+            const urlsText = document.getElementById('product-images-url').value.trim();
+            if (!urlsText) {
+                showStatus('product-status', 'Please enter product image URLs', 'error');
+                return;
+            }
+
+            const urls = urlsText.split('\n').filter(url => url.trim());
+            const productResults = urls.map(url => ({
+                optimizedUrl: url,
+                originalUrl: url,
+                publicId: url.split('/').pop().split('.')[0]
+            }));
+
+            const assets = JSON.parse(localStorage.getItem('goldenBeanAssets') || '{}');
+            assets.productImages = productResults;
+            localStorage.setItem('goldenBeanAssets', JSON.stringify(assets));
+
+            // Update actual product images
+            const productImageElements = document.querySelectorAll('.menu-card-img');
+            productResults.forEach((imageResult, index) => {
+                if (productImageElements[index]) {
+                    productImageElements[index].src = imageResult.optimizedUrl;
+                }
+            });
+
+            showStatus('product-status', `✅ Applied ${productResults.length} product images!`, 'success');
+        }
+
+        // Apply gallery images
+        function applyGalleryImages() {
+            const urlsText = document.getElementById('gallery-images-url').value.trim();
+            if (!urlsText) {
+                showStatus('gallery-status', 'Please enter gallery image URLs', 'error');
+                return;
+            }
+
+            const urls = urlsText.split('\n').filter(url => url.trim());
+            const galleryResults = urls.map(url => ({
+                optimizedUrl: url,
+                originalUrl: url,
+                publicId: url.split('/').pop().split('.')[0]
+            }));
+
+            const assets = JSON.parse(localStorage.getItem('goldenBeanAssets') || '{}');
+            assets.galleryImages = galleryResults;
+            localStorage.setItem('goldenBeanAssets', JSON.stringify(assets));
+
+            // Update actual gallery images
+            const galleryImageElements = document.querySelectorAll('.gallery-item img');
+            galleryResults.forEach((imageResult, index) => {
+                if (galleryImageElements[index]) {
+                    galleryImageElements[index].src = imageResult.optimizedUrl;
+                }
+            });
+
+            showStatus('gallery-status', `✅ Applied ${galleryResults.length} gallery images!`, 'success');
+        }
+
+        // Test main website video
+        function testMainWebsite() {
+            // Open main website in a new tab/window to test video
+            const mainWindow = window.open('index.html', '_blank');
+
+            if (mainWindow) {
+                showStatus('video-test-status', '✅ Main website opened! Check if the hero video is playing.', 'success');
+
+                // Focus on the new window
+                mainWindow.focus();
+
+                // Check video after a short delay
+                setTimeout(() => {
+                    try {
+                        const heroVideo = mainWindow.document.querySelector('.hero-video');
+                        const videoSource = mainWindow.document.querySelector('.hero-video source');
+
+                        if (heroVideo && videoSource) {
+                            const videoSrc = videoSource.src;
+                            if (videoSrc && videoSrc !== 'https://videos.pexels.com/video-files/7487671/7487671-hd_1920_1080_24fps.mp4') {
+                                showStatus('video-test-status', '✅ Custom video detected on main website!', 'success');
+                            } else {
+                                showStatus('video-test-status', '⚠️ Main website is using default video. Apply your video first.', 'info');
+                            }
+                        } else {
+                            showStatus('video-test-status', '❌ Could not access video elements on main website.', 'error');
+                        }
+                    } catch (error) {
+                        showStatus('video-test-status', '❌ Cannot access main website video (security restriction).', 'error');
+                    }
+                }, 2000);
+            } else {
+                showStatus('video-test-status', '❌ Could not open main website. Please allow popups.', 'error');
+            }
+        }
+
+        // Apply all assets
+        function applyAllAssets() {
+            applyHeroVideo();
+            applyProductImages();
+            applyGalleryImages();
+            showStatus('apply-all-status', '🎉 All assets applied! Refresh the page to see all changes.', 'success');
+        }
+
+        // Auto-load existing assets on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const assets = JSON.parse(localStorage.getItem('goldenBeanAssets') || '{}');
+
+            if (assets.heroVideo && assets.heroVideo.optimizedUrl) {
+                document.getElementById('hero-video-url').value = assets.heroVideo.optimizedUrl;
+            }
+
+            if (assets.productImages && assets.productImages.length > 0) {
+                const productUrls = assets.productImages.map(img => img.optimizedUrl).join('\n');
+                document.getElementById('product-images-url').value = productUrls;
+            }
+
+            if (assets.galleryImages && assets.galleryImages.length > 0) {
+                const galleryUrls = assets.galleryImages.map(img => img.optimizedUrl).join('\n');
+                document.getElementById('gallery-images-url').value = galleryUrls;
+            }
+        });
+    </script>
+</body>
+</html>

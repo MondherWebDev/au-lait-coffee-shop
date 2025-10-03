@@ -1,0 +1,407 @@
+{
+  "logo": {
+    "url": "https://res.cloudinary.com/dci2zslwa/image/upload/v1759380825/sj1cd7ut8sqjhndmtjzj.png",
+    "image": "https://res.cloudinary.com/dci2zslwa/image/upload/v1759380825/sj1cd7ut8sqjhndmtjzj.png"
+  },
+  "hero": {
+    "title": "Welcome to Our Coffee Shop",
+    "subtitle": "Freshly brewed coffee and delicious treats await you. Come experience the perfect blend of quality and comfort.",
+    "cta": "Explore Our Menu",
+    "video": "https://res.cloudinary.com/dci2zslwa/video/upload/v1759380745/klzmdqlzmewno0004uwy.mp4",
+    "slides": []
+  },
+  "about": {
+    "title": "About Our Coffee Shop",
+    "content": "We are passionate about serving exceptional coffee and creating a warm, welcoming atmosphere for our community. Every cup is crafted with care using the finest beans.",
+    "image": "https://res.cloudinary.com/dci2zslwa/image/upload/v1759433737/mujhysflmakkjlylhhec.png"
+  },
+  "contact": {
+    "address": "1608 17th St NW, Washington, DC 20009",
+    "phone": "(202) 908-9761",
+    "email": "aulaitdc@gmail.com",
+    "hours": "Mon - Fri 7AM - 8PM | Sat 8AM - 8PM | Sun 8AM - 6PM"
+  },
+  "gallery": {
+    "title": "",
+    "images": []
+  },
+  "settings": {
+    "siteTitle": "Au Lait Coffee Shop",
+    "favicon": ""
+  },
+  "categories": [
+    {
+      "id": "hot-drinks",
+      "name": "Hot Drinks",
+      "description": "Our signature hot coffee beverages"
+    },
+    {
+      "id": "cold-drinks",
+      "name": "Cold Drinks",
+      "description": "Refreshing cold coffee drinks"
+    },
+    {
+      "id": "savory-crepes",
+      "name": "Savory Crepes",
+      "description": "Delicious savory crepe options"
+    },
+    {
+      "id": "sweet-crepes",
+      "name": "Sweet Crepes",
+      "description": "Sweet and decadent crepe varieties"
+    },
+    {
+      "id": "specialty-drinks",
+      "name": "Specialty Drinks",
+      "description": "Unique and specialty beverage options"
+    },
+    {
+      "id": "smoothies",
+      "name": "Smoothies",
+      "description": "Fresh and healthy smoothie options"
+    },
+    {
+      "id": "breakfast-sandwich",
+      "name": "Breakfast Sandwich",
+      "description": "Breakfast sandwich options"
+    },
+    {
+      "id": "brunch",
+      "name": "Brunch",
+      "description": "Brunch items and specials"
+    },
+    {
+      "id": "sandwich",
+      "name": "Sandwich",
+      "description": "Lunch and dinner sandwich options"
+    },
+    {
+      "id": "omelets",
+      "name": "Omelets",
+      "description": "Fluffy omelet varieties"
+    },
+    {
+      "id": "soup-salads",
+      "name": "Soup & Salads",
+      "description": "Fresh soups and salads"
+    },
+    {
+      "id": "benedicts",
+      "name": "Benedicts",
+      "description": "Eggs Benedict variations"
+    }
+  ],
+  "products": [
+    {
+      "id": "cafe-au-lait",
+      "name": "Cafe Au Lait",
+      "description": "Rich coffee and steamed milk in perfect harmony",
+      "category": "hot-drinks",
+      "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=800&auto=format&fit=crop",
+      "sizes": [
+        {
+          "size": "12oz",
+          "price": "4.50"
+        },
+        {
+          "size": "16oz",
+          "price": "5.50"
+        },
+        {
+          "size": "20oz",
+          "price": "6.50"
+        }
+      ]
+    },
+    {
+      "id": "espresso-16",
+      "name": "Espresso",
+      "price": "3.50",
+      "description": "Rich, intense shot with perfect crema",
+      "category": "hot-drinks",
+      "image": "https://images.unsplash.com/photo-1579992357154-faf4bde95b3d?q=80&w=687&auto=format&fit=crop"
+    },
+    {
+      "id": "latte-16",
+      "name": "Latte",
+      "price": "5.25",
+      "description": "Velvety steamed milk poured over espresso",
+      "category": "hot-drinks",
+      "image": "https://images.unsplash.com/photo-1655012735888-fd03a5c31c53?q=80&w=1170&auto=format&fit=crop"
+    },
+    {
+      "id": "cappuccino-16",
+      "name": "Cappuccino",
+      "price": "5.25",
+      "description": "Equal parts espresso, steamed milk, and foam",
+      "category": "hot-drinks",
+      "image": "https://images.unsplash.com/photo-1572442388796-11668a67e53d?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "americano-16",
+      "name": "Americano",
+      "price": "3.75",
+      "description": "Espresso diluted with hot water",
+      "category": "hot-drinks",
+      "image": "https://images.unsplash.com/photo-1551218808-94e220e084d2?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "hot-chocolate-16",
+      "name": "Hot Chocolate",
+      "price": "4.75",
+      "description": "Rich and creamy hot chocolate",
+      "category": "hot-drinks",
+      "image": "https://images.unsplash.com/photo-1542990253-0d0f5be92588?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "chai-latte-16",
+      "name": "Chai Latte",
+      "price": "4.75",
+      "description": "Spiced chai tea with steamed milk",
+      "category": "hot-drinks",
+      "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "cold-brew-16",
+      "name": "Cold Brew",
+      "price": "5.00",
+      "description": "Slow-steeped for 20 hours for smooth, bold flavor",
+      "category": "cold-drinks",
+      "image": "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=1169&auto=format&fit=crop"
+    },
+    {
+      "id": "iced-tea-16",
+      "name": "Iced Tea",
+      "price": "4.00",
+      "description": "Refreshing iced tea",
+      "category": "cold-drinks",
+      "image": "https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "bottled-water",
+      "name": "Bottled Water",
+      "price": "2.50",
+      "description": "Pure bottled water",
+      "category": "cold-drinks",
+      "image": "https://images.unsplash.com/photo-1523362628745-0c100150b504?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "sparkling-water",
+      "name": "Sparkling Water",
+      "price": "4.00",
+      "description": "Refreshing sparkling water",
+      "category": "cold-drinks",
+      "image": "https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "juice",
+      "name": "Juice",
+      "price": "4.00",
+      "description": "Fresh fruit juice (10oz)",
+      "category": "cold-drinks",
+      "image": "https://images.unsplash.com/photo-1600271886742-f0499f0a8743?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "macchiato",
+      "name": "Macchiato",
+      "price": "4.00",
+      "description": "Espresso \"marked\" with a dollop of foamed milk",
+      "category": "specialty-drinks",
+      "image": "https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "cortado",
+      "name": "Cortado",
+      "price": "4.25",
+      "description": "Equal parts espresso and steamed milk",
+      "category": "specialty-drinks",
+      "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "affogato",
+      "name": "Affogato",
+      "price": "5.50",
+      "description": "Vanilla ice cream \"drowned\" in hot espresso",
+      "category": "specialty-drinks",
+      "image": "https://images.unsplash.com/photo-1587734195503-904fca47e0df?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "hot-tea",
+      "name": "Hot Tea",
+      "price": "3.50",
+      "description": "Selection of premium hot teas",
+      "category": "specialty-drinks",
+      "image": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "matcha-tea",
+      "name": "Matcha Tea",
+      "price": "4.00",
+      "description": "High-quality ceremonial matcha",
+      "category": "specialty-drinks",
+      "image": "https://images.unsplash.com/photo-1536256263952-8889267dd909?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "mimosa",
+      "name": "Mimosa",
+      "price": "7.00",
+      "description": "Classic mimosa with orange juice and champagne",
+      "category": "specialty-drinks",
+      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "kevin-bacon",
+      "name": "The Kevin Bacon",
+      "price": "12.95",
+      "description": "Combination of turkey, bacon, cheese, and tomatoes with thousand island sauce",
+      "category": "savory-crepes",
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "the-classic",
+      "name": "The Classic",
+      "price": "11.95",
+      "description": "Ham, mozzarella cheese and our Dijonnaise sauce",
+      "category": "savory-crepes",
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "crepe-florentine",
+      "name": "Crepe Florentine",
+      "price": "11.95",
+      "description": "Spinach, mushrooms, mozzarella cheese and sunflower seeds, topped with a pepper parmesan sauce",
+      "category": "savory-crepes",
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "the-motz",
+      "name": "The Motz",
+      "price": "11.95",
+      "description": "Mozzarella, basil, and tomato with cracked pepper and olive oil",
+      "category": "savory-crepes",
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "morning-delight",
+      "name": "Morning Delight",
+      "price": "8.95",
+      "description": "Bacon, egg, and mozzarella in a savory crepe",
+      "category": "savory-crepes",
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "crepe-suzette",
+      "name": "Crepe Suzette",
+      "price": "11.95",
+      "description": "Classic French flavors of orange marmalade, Grand Marnier caramel sauce",
+      "category": "sweet-crepes",
+      "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "bananarama",
+      "name": "The Bananarama",
+      "price": "12.95",
+      "description": "Tasty mix of banana, granola, honey, and peanut butter",
+      "category": "sweet-crepes",
+      "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "nutty-banana",
+      "name": "Nutty Banana",
+      "price": "12.95",
+      "description": "Rich taste of Nutella paired with fresh banana, chocolate danish sauce and powdered sugar",
+      "category": "sweet-crepes",
+      "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "plain-jane",
+      "name": "Plain Jane",
+      "price": "8.95",
+      "description": "Choose from cinnamon and sugar, brown sugar, or lemon sugar. Enjoy the simplicity!",
+      "category": "sweet-crepes",
+      "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "crepe-damour",
+      "name": "Crepe d'amour",
+      "price": "12.95",
+      "description": "The perfect pairing of Nutella and strawberries, mountain honey and powdered sugar",
+      "category": "sweet-crepes",
+      "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "greek-stallion",
+      "name": "Greek Stallion",
+      "price": "8.95",
+      "description": "Kale, Spinach, Dates, Chia Seeds, Almond Milk, Banana, Cashews, Cinnamon, Mountain Honey",
+      "category": "smoothies",
+      "image": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "classic-smoothie",
+      "name": "Classic",
+      "price": "8.95",
+      "description": "Coconut Water, Strawberry, Banana, Blueberry",
+      "category": "smoothies",
+      "image": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "energy-smoothie",
+      "name": "Energy",
+      "price": "8.95",
+      "description": "Almond Butter, Banana, Almond Milk, Chocolate Protein, Mountain Honey",
+      "category": "smoothies",
+      "image": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "berry-acai",
+      "name": "Berry Acai",
+      "price": "8.95",
+      "description": "Acai, Strawberry, Almond Milk, Blueberry, Banana, Coconut Water",
+      "category": "smoothies",
+      "image": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "summer-smoothie",
+      "name": "Summer",
+      "price": "8.95",
+      "description": "Banana, Spinach, Almond Milk, Pineapple, Banana, Mango",
+      "category": "smoothies",
+      "image": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "popeye-smoothie",
+      "name": "Popeye",
+      "price": "8.95",
+      "description": "Banana, Spinach, Almond Milk, Almonds, Vanilla Protein, Mountain Honey, Dates, Cinnamon",
+      "category": "smoothies",
+      "image": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=800&auto=format&fit=crop"
+    }
+  ],
+  "footer": {
+    "address": "1608 17th St NW",
+    "city": "Washington, DC 20009",
+    "email": "aulaitdc@gmail.com",
+    "phone": "(202) 908-9761",
+    "socialLinks": [
+      {
+        "id": "1759513994591",
+        "platform": "instagram",
+        "url": "https://www.instagram.com/aulaitdc/",
+        "icon": "instagram"
+      },
+      {
+        "id": "1759514004781",
+        "platform": "twitter",
+        "url": "https://x.com/AuLaitDC",
+        "icon": "twitter"
+      },
+      {
+        "id": "1759516770108",
+        "platform": "facebook",
+        "url": "https://www.facebook.com/people/Au-Lait-Cafe/100089513087459/",
+        "icon": "facebook"
+      }
+    ]
+  }
+}

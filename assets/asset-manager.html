@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Manager - Golden Bean Brews</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #fff;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #FAD45B;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .upload-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .upload-section h2 {
+            color: #FAD45B;
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+        .file-input {
+            margin: 10px 0;
+        }
+        .file-input input[type="file"] {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            color: #fff;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .file-input input[type="file"]::file-selector-button {
+            background: #FAD45B;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            color: #000;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .upload-btn {
+            background: #FAD45B;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            color: #000;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        .upload-btn:hover {
+            background: #e6c04a;
+            transform: translateY(-2px);
+        }
+        .upload-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        .status.success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #4CAF50;
+        }
+        .status.error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #f44336;
+        }
+        .url-display {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        .instructions {
+            background: rgba(250, 212, 91, 0.1);
+            border: 1px solid rgba(250, 212, 91, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .instructions h3 {
+            color: #FAD45B;
+            margin-top: 0;
+        }
+        .instructions ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🫘 Asset Manager</h1>
+
+        <div class="instructions">
+            <h3>🚀 Cloudinary Setup Instructions:</h3>
+            <ol>
+                <li>Go to your <a href="https://cloudinary.com/console" target="_blank" style="color: #FAD45B;">Cloudinary Dashboard</a></li>
+                <li>Navigate to <strong>Settings → Upload → Upload presets</strong></li>
+                <li>Click <strong>"Enable unsigned uploading"</strong> or create a new preset</li>
+                <li>Select <strong>"Unsigned"</strong> delivery type</li>
+                <li><strong>Copy the preset name</strong> (usually "ml_default" for existing accounts)</li>
+            </ol>
+            <div style="background: rgba(250, 212, 91, 0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                <strong>✅ Current Config:</strong> Cloud: dci2zslwa, Preset: ml_default<br>
+                <strong>📝 Note:</strong> Using your existing "ml_default" preset for uploads
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <h2>🎥 Hero Video</h2>
+            <p>Upload your main hero section video (MP4 format recommended)</p>
+            <div class="file-input">
+                <input type="file" id="hero-video" accept="video/*">
+            </div>
+            <button class="upload-btn" onclick="uploadHeroVideo()">Upload Hero Video</button>
+            <div id="hero-status"></div>
+            <div id="hero-url" class="url-display" style="display: none;"></div>
+        </div>
+
+        <div class="upload-section">
+            <h2>☕ Product Images</h2>
+            <p>Upload images for your coffee products (JPG, PNG format)</p>
+            <div class="file-input">
+                <input type="file" id="product-images" accept="image/*" multiple>
+            </div>
+            <button class="upload-btn" onclick="uploadProductImages()">Upload Product Images</button>
+            <div id="product-status"></div>
+            <div id="product-urls" class="url-display" style="display: none;"></div>
+        </div>
+
+        <div class="upload-section">
+            <h2>🖼️ Gallery Images</h2>
+            <p>Upload images for your gallery section</p>
+            <div class="file-input">
+                <input type="file" id="gallery-images" accept="image/*" multiple>
+            </div>
+            <button class="upload-btn" onclick="uploadGalleryImages()">Upload Gallery Images</button>
+            <div id="gallery-status"></div>
+            <div id="gallery-urls" class="url-display" style="display: none;"></div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <p><a href="index.html" style="color: #FAD45B; text-decoration: none; font-weight: 600;">← Back to Website</a></p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { uploadHeroVideo, uploadProductImages, uploadGalleryImages } from './upload-assets.js';
+
+        window.uploadHeroVideo = async function() {
+            const fileInput = document.getElementById('hero-video');
+            const statusDiv = document.getElementById('hero-status');
+            const urlDiv = document.getElementById('hero-url');
+            const button = event.target;
+
+            if (!fileInput.files[0]) {
+                showStatus(statusDiv, 'Please select a video file first', 'error');
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = 'Uploading...';
+
+            try {
+                const result = await uploadHeroVideo(fileInput.files[0]);
+                showStatus(statusDiv, 'Video uploaded successfully!', 'success');
+                urlDiv.innerHTML = `
+                    <div><strong>Optimized URL:</strong><br>${result.optimizedUrl}</div>
+                    <div><strong>Original URL:</strong><br>${result.originalUrl}</div>
+                `;
+                urlDiv.style.display = 'block';
+            } catch (error) {
+                showStatus(statusDiv, 'Upload failed: ' + error.message, 'error');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Upload Hero Video';
+            }
+        };
+
+        window.uploadProductImages = async function() {
+            const fileInput = document.getElementById('product-images');
+            const statusDiv = document.getElementById('product-status');
+            const urlDiv = document.getElementById('product-urls');
+            const button = event.target;
+
+            if (fileInput.files.length === 0) {
+                showStatus(statusDiv, 'Please select product image files first', 'error');
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = 'Uploading...';
+
+            try {
+                const results = await uploadProductImages(Array.from(fileInput.files));
+                showStatus(statusDiv, `Uploaded ${results.length} product images successfully!`, 'success');
+                urlDiv.innerHTML = results.map(result =>
+                    `<div>
+                        <strong>Optimized:</strong><br>${result.optimizedUrl}<br>
+                        <strong>Original:</strong><br>${result.originalUrl}
+                    </div><hr>`
+                ).join('');
+                urlDiv.style.display = 'block';
+            } catch (error) {
+                showStatus(statusDiv, 'Upload failed: ' + error.message, 'error');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Upload Product Images';
+            }
+        };
+
+        window.uploadGalleryImages = async function() {
+            const fileInput = document.getElementById('gallery-images');
+            const statusDiv = document.getElementById('gallery-status');
+            const urlDiv = document.getElementById('gallery-urls');
+            const button = event.target;
+
+            if (fileInput.files.length === 0) {
+                showStatus(statusDiv, 'Please select gallery image files first', 'error');
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = 'Uploading...';
+
+            try {
+                const results = await uploadGalleryImages(Array.from(fileInput.files));
+                showStatus(statusDiv, `Uploaded ${results.length} gallery images successfully!`, 'success');
+                urlDiv.innerHTML = results.map(result =>
+                    `<div>
+                        <strong>Optimized:</strong><br>${result.optimizedUrl}<br>
+                        <strong>Original:</strong><br>${result.originalUrl}
+                    </div><hr>`
+                ).join('');
+                urlDiv.style.display = 'block';
+            } catch (error) {
+                showStatus(statusDiv, 'Upload failed: ' + error.message, 'error');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Upload Gallery Images';
+            }
+        };
+
+        function showStatus(div, message, type) {
+            div.textContent = message;
+            div.className = `status ${type}`;
+        }
+    </script>
+</body>
+</html>
