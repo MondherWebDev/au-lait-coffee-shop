@@ -13,7 +13,9 @@ async function getRedisClient() {
         throw new Error('REDIS_URL or KV_URL not configured');
       }
 
-      console.log('🔗 Connecting to Redis Cloud...');
+      console.log('🔗 Initializing Redis Cloud connection...');
+      console.log('🔗 Redis URL:', redisUrl.replace(/:[^:]+@/, ':****@')); // Hide password in logs
+
       redisClient = createClient({
         url: redisUrl,
         socket: {
@@ -34,7 +36,9 @@ async function getRedisClient() {
         console.log('✅ Redis Cloud connected successfully');
       });
 
+      console.log('🔗 Attempting to connect to Redis Cloud...');
       await redisClient.connect();
+      console.log('✅ Redis Cloud connection established');
     } catch (error) {
       console.error('❌ Failed to connect to Redis Cloud:', error);
       throw error;
