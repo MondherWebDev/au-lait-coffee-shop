@@ -44,6 +44,7 @@ function AdminSecurityWrapper({ children, onAuthenticated }: { children: React.R
     const handleKeyDown = (event: KeyboardEvent) => {
       // Check for Ctrl+Shift+A
       if (event.ctrlKey && event.shiftKey && event.key === 'A') {
+        console.log('🎹 Ctrl+Shift+A pressed - opening admin dashboard');
         event.preventDefault();
         setShowPasscodeModal(true);
         setPasscode('');
@@ -51,8 +52,13 @@ function AdminSecurityWrapper({ children, onAuthenticated }: { children: React.R
       }
     };
 
+    console.log('🎹 Admin dashboard keyboard shortcut listener attached');
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+
+    return () => {
+      console.log('🎹 Admin dashboard keyboard shortcut listener removed');
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   const handlePasscodeSubmit = () => {

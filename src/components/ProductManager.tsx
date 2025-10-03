@@ -127,21 +127,38 @@ export default function ProductManager({ products, categories, onUpdateProducts 
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', 'au-lait-products');
+      formData.append('upload_preset', 'au_lait_preset');
+
+      // Get cloud name from environment or use default
+      const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'your-cloud-name';
+
+      console.log('📤 Uploading product image to Cloudinary...');
+      console.log('Cloud name:', cloudName);
+      console.log('File size:', file.size);
+      console.log('File type:', file.type);
 
       const response = await fetch(
-        `https://api.cloudinary.com/v1_1/dci2zslwa/image/upload`,
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
         {
           method: 'POST',
           body: formData,
         }
       );
 
+      console.log('Response status:', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Cloudinary error response:', errorText);
+        throw new Error(`Upload failed: ${response.status} - ${errorText}`);
+      }
+
       const data = await response.json();
+      console.log('Product image upload successful:', data.secure_url);
       return data.secure_url;
     } catch (error) {
-      console.error('Upload failed:', error);
-      throw new Error('Failed to upload image');
+      console.error('Product image upload error:', error);
+      throw new Error('Failed to upload image. Please check your Cloudinary configuration.');
     } finally {
       setIsUploading(false);
     }
