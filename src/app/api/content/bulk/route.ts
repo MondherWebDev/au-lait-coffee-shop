@@ -99,37 +99,37 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Try Vercel KV if available
+    // Try Redis Cloud directly first
     try {
-      const { kv } = await import('@vercel/kv');
+      const client = await getRedisClient();
 
-      // Save to Vercel KV (Redis) for persistence
+      // Save to Redis Cloud for persistence
       const contentKey = 'aulait_content_data';
 
-      // Store the entire content object in KV
-      await kv.set(contentKey, JSON.stringify(body));
+      // Store the entire content object in Redis
+      await client.set(contentKey, JSON.stringify(body));
 
       // Also store individual sections for easier retrieval
       for (const [section, data] of Object.entries(body)) {
-        await kv.set(`aulait_section_${section}`, JSON.stringify(data));
+        await client.set(`aulait_section_${section}`, JSON.stringify(data));
       }
 
-      console.log('✅ Content saved to Vercel KV');
+      console.log('✅ Content saved to Redis Cloud');
 
       return NextResponse.json({
         success: true,
-        message: 'Content saved successfully to database',
+        message: 'Content saved successfully to Redis Cloud',
         data: body,
-        storage: 'vercel-kv',
-        kvStatus: 'working'
+        storage: 'redis-cloud',
+        redisStatus: 'working'
       });
 
-    } catch (kvError) {
-      console.warn('⚠️ Vercel KV not available, using localStorage only:', kvError);
+    } catch (redisError) {
+      console.warn('⚠️ Redis Cloud not available, using localStorage only:', redisError);
 
       return NextResponse.json({
         success: true,
-        message: 'Content saved to localStorage (KV unavailable)',
+        message: 'Content saved to localStorage (Redis unavailable)',
         data: body,
         storage: 'localStorage'
       });
@@ -163,25 +163,25 @@ export async function PATCH() {
 // GET endpoint to retrieve content
 export async function GET() {
   try {
-    // Try to get from Vercel KV first
+    // Try to get from Redis Cloud first
     try {
-      const { kv } = await import('@vercel/kv');
+      const client = await getRedisClient();
       const contentKey = 'aulait_content_data';
-      const contentData = await kv.get(contentKey);
+      const contentData = await client.get(contentKey);
 
       if (contentData) {
-        const content = JSON.parse(contentData as string);
+        const content = JSON.parse(contentData);
         return NextResponse.json({
           success: true,
           data: content,
-          storage: 'vercel-kv'
+          storage: 'redis-cloud'
         });
       }
-    } catch (kvError) {
-      console.warn('⚠️ Vercel KV not available for GET:', kvError);
+    } catch (redisError) {
+      console.warn('⚠️ Redis Cloud not available for GET:', redisError);
     }
 
-    // Fallback to localStorage if KV is not available
+    // Fallback to localStorage if Redis is not available
     if (typeof window !== 'undefined') {
       try {
         const localData = localStorage.getItem('aulait_content_backup');
