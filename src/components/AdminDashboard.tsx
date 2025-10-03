@@ -377,12 +377,11 @@ export default function AdminDashboard({ isOpen, onClose, currentContent, onCont
           return 'http://localhost:3001';
         }
 
-        // For production (Vercel), use the deployed Express server
-        // We'll need to deploy the Express server separately or use a database service
+        // For production (Vercel), use the same domain (Next.js API routes)
+        // Vercel KV will handle the persistence
         if (currentUrl.includes('vercel.app') || currentUrl.includes('au-lait-coffee-shop')) {
-          console.log('🔒 Vercel production detected - using deployed API server');
-          // For now, use a placeholder - this needs to be configured with actual deployed server
-          return 'https://your-deployed-api-server.vercel.app'; // TODO: Replace with actual deployed API URL
+          console.log('🔒 Vercel production detected - using Vercel KV storage');
+          return ''; // Use same domain for Next.js API routes
         }
 
         // Fallback
