@@ -17,33 +17,41 @@ export default function HeroSection({ hero }: HeroSectionProps) {
   useEffect(() => {
     const video = videoRef.current;
     if (video && hero.video) {
-      const playVideo = async () => {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+      const attemptPlay = async () => {
         try {
-          // Check if it's a mobile device
-          const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-          if (isMobile) {
-            // For mobile, we need to ensure playsInline and handle autoplay restrictions
-            video.playsInline = true;
-            video.muted = true; // Must be muted for autoplay on mobile
-
-            // Try to play the video
-            await video.play();
-          } else {
-            // For desktop, standard autoplay should work
-            await video.play();
-          }
+          video.muted = true;
+          video.playsInline = true;
+          await video.play();
         } catch (error) {
-          console.log('Video autoplay failed:', error);
-          // Video autoplay failed, but that's okay - it will display as a static image
+          console.log('Autoplay failed:', error);
         }
       };
 
-      // Load video metadata first
-      video.addEventListener('loadedmetadata', playVideo);
+      const handleUserInteraction = async () => {
+        await attemptPlay();
+        // Remove listeners after first interaction
+        document.removeEventListener('touchstart', handleUserInteraction);
+        document.removeEventListener('click', handleUserInteraction);
+        document.removeEventListener('scroll', handleUserInteraction);
+      };
+
+      // Try immediate autoplay for desktop
+      if (!isMobile) {
+        video.addEventListener('loadedmetadata', attemptPlay);
+      } else {
+        // For mobile, wait for user interaction
+        document.addEventListener('touchstart', handleUserInteraction, { once: true });
+        document.addEventListener('click', handleUserInteraction, { once: true });
+        document.addEventListener('scroll', handleUserInteraction, { once: true });
+      }
 
       return () => {
-        video.removeEventListener('loadedmetadata', playVideo);
+        video.removeEventListener('loadedmetadata', attemptPlay);
+        document.removeEventListener('touchstart', handleUserInteraction);
+        document.removeEventListener('click', handleUserInteraction);
+        document.removeEventListener('scroll', handleUserInteraction);
       };
     }
   }, [hero.video]);
